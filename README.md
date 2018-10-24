@@ -4,7 +4,7 @@ I created the first version of this Office Add-In for a presentation at SharePoi
 
 Although this add-in does not serve any real purpose, I am iterating on it both to continue to leverage it for future presentations but also to continue to enhance my development skills. It may not be perfect, but it's mine ;-)
 
-## To compile and run
+## To compile and run locally
 ```
 npm run webpack
 

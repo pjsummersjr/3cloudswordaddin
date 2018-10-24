@@ -1,8 +1,8 @@
-# React + Typescript + Webpack Core Scaffolding
+# 3Clouds Microsoft Word Add-In
 ## Overview
-Building the basic scaffolding for a **React** project that is written in **Typescript** and built with **Webpack**
+I created the first version of this Office Add-In for a presentation at SharePoint Saturday New England on October 20, 2018. This version was refactored to leverage the React framework in part so that I could more fully leverage the Office UI Fabric React components. 
 
-This branch provides some core capabilities for implementing a Microsoft Word Add-In using the above tools.
+Although this add-in does not serve any real purpose, I am iterating on it both to continue to leverage it for future presentations but also to continue to enhance my development skills. It may not be perfect, but it's mine ;-)
 
 ## To compile and run
 ```

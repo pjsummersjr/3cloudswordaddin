@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <title>Word Office Add-In</title>
+
+    <!-- Office JavaScript API 
+        -- I have typings for this, but not an NPM package
+    -->
+    <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/beta/hosted/office.debug.js"></script>
+    <script src="https://unpkg.com/core-js/client/core.min.js"></script>
+    <!-- Office Fabric UI stylles 
+        - when using Office Fabric React in an Office Add-In, it appears I need to include these as CSS links
+          in the HTML file
+    -->
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.min.css">
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.1/css/fabric.component.css">
+  </head>
+  <body class="ms-Fabric"><!-- Need to include this body style to set some of the baseline fonts -->
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+    -->
+  </body>
+</html>

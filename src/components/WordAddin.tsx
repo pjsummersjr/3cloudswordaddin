@@ -37,9 +37,7 @@ enum OPP_MODE {
     ERROR = "error"
 }
 
-export default class WordAddin<IWordAddinProps, IWordAddInState> extends OfficeAddInComponent {
-
-    
+export default class WordAddin<IWordAddinProps, IWordAddInState> extends OfficeAddInComponent {    
 
     constructor(props: IOfficeAddinProps, state: IOfficeAddinState) {
         super(props, state);
@@ -57,7 +55,6 @@ export default class WordAddin<IWordAddinProps, IWordAddInState> extends OfficeA
         this.loadContent(opportunityUrl)
         .then(
             function(response: any){
-                console.log(JSON.stringify(response));
                 self.setState({
                     oppData:response,
                     mode: OPP_MODE.OPP_LIST
@@ -84,7 +81,7 @@ export default class WordAddin<IWordAddinProps, IWordAddInState> extends OfficeA
                         <DocumentCardTitle title={item.description ? item.description : 'No description found'} shouldTruncate={true} showAsSecondaryTitle={true} />
                     </DocumentCard>)
         })
-        return (oppContent);
+        return oppContent;
     }
 
     render() {
@@ -94,8 +91,9 @@ export default class WordAddin<IWordAddinProps, IWordAddInState> extends OfficeA
         if(this.state.mode === OPP_MODE.LOADING_OPPS) {
             return (<ProgressIndicator label={this.state.status}/>);
         }
-        let opportunities: any = this.renderOpportunities(this.state.oppData);
-        return (<div>{opportunities}</div>);
+        let content: any = (<div>Something weird happened. No data available</div>) 
+        if(this.state.mode == OPP_MODE.OPP_LIST) content = this.renderOpportunities(this.state.oppData);
+        return (<div>{content}</div>);
     }
 
 }

@@ -56,6 +56,7 @@ export class OfficeAddInComponent extends React.Component<IOfficeAddinProps, any
             console.error(`Error caught in code: ${error}`);
             return deferred.reject(error);
         });
+
         return deferred.promise;
     }
 }

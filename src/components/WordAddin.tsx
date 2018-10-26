@@ -2,7 +2,9 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import { ProgressIndicator } from 'office-ui-fabric-react/lib/ProgressIndicator';
-import { DocumentCard, DocumentCardTitle } from 'office-ui-fabric-react/lib/DocumentCard';
+import { DocumentCard, DocumentCardTitle, DocumentCardActions } from 'office-ui-fabric-react/lib/DocumentCard';
+import { initializeIcons } from 'office-ui-fabric-react/lib/Icons';
+
 
 import * as OfficeHelpers from '@microsoft/office-js-helpers';
  
@@ -47,9 +49,21 @@ export default class WordAddin<IWordAddinProps, IWordAddInState> extends OfficeA
             mode: OPP_MODE.LOADING_OPPS,
             status:'Loading opportunities'
         }
-    }
 
+        initializeIcons();
+    }
+    /**
+     * When the component loads, it will load whatever loads from this method
+     * 
+     * This is a base React component method so I don't want to put too much application-specific logic/code in here
+     */
     componentDidMount(): void {
+        this.loadOpportunities();
+    }
+    /**
+     * Loads a list of opportunities into the state object - this will call render, FYI
+     */
+    loadOpportunities(): void {
         let opportunityUrl = "https://pjsummersjr2.ngrok.io/api/opportunities"
         let self = this;
         this.loadContent(opportunityUrl)
@@ -76,12 +90,57 @@ export default class WordAddin<IWordAddinProps, IWordAddInState> extends OfficeA
         let oppContent = (<div>No opportunity data available</div>);
         if(!oppData) return oppContent;
         oppContent = oppData.value.map((item: any, index: number) =>{
-            return (<DocumentCard key={item.opportunityid}>
-                        <DocumentCardTitle title={item.name} shouldTruncate={false} />
-                        <DocumentCardTitle title={item.description ? item.description : 'No description found'} shouldTruncate={true} showAsSecondaryTitle={true} />
-                    </DocumentCard>)
+            return (
+                <DocumentCard key={item.opportunityid}>
+                    <DocumentCardTitle title={item.name} shouldTruncate={false} />
+                    <DocumentCardTitle title={item.description ? item.description : 'No description found'} shouldTruncate={true} showAsSecondaryTitle={true} />
+                    <DocumentCardActions 
+                        actions={[              
+                            {
+                                iconProps: {iconName: 'Dynamics365Logo'},
+                                text: 'Open in Dynamics 365',
+                                onClick: (ev: any) => {
+                                window.open('https://paulsumm.crm.dynamics.com')
+                                },
+                                ariaLabel: 'Open in Dynamics 365'
+                            },
+                            {
+                                iconProps: {iconName: 'CirclePlus'},
+                                text: 'Show Opportunity Details',
+                                onClick: (ev: any) => {
+                                this.loadOpportunityDetails(item.opportunityid);
+                                },
+                                ariaLabel: 'Click for opportunity details'
+                            }
+                        ]}
+                    />
+                </DocumentCard>
+            )
         })
         return oppContent;
+    }
+
+    loadOpportunityDetails(oppId: string): void {
+        let opportunityUrl = `https://pjsummersjr2.ngrok.io/api/opportunities/${oppId}`
+        let self = this;
+        this.loadContent(opportunityUrl)
+        .then(
+            function(response: any){
+                self.setState({
+                    oppData:response,
+                    mode: OPP_MODE.OPP_DETAIL
+                });
+            },
+            (error: any) => {
+                console.log(`Error from authenticate: ${error}`);
+                var token = self.props.authenticator.tokens.get(self.provider);
+                console.log(`Got a token: ${JSON.stringify(token)}`);
+            } 
+        );
+    }
+
+    renderOpportunityDetail(oppData: any): any {
+        return (<div>{JSON.stringify(oppData)}</div>);
     }
 
     render() {
@@ -93,6 +152,7 @@ export default class WordAddin<IWordAddinProps, IWordAddInState> extends OfficeA
         }
         let content: any = (<div>Something weird happened. No data available</div>) 
         if(this.state.mode == OPP_MODE.OPP_LIST) content = this.renderOpportunities(this.state.oppData);
+        if(this.state.mode == OPP_MODE.OPP_DETAIL) content = this.renderOpportunityDetail(this.state.oppData);
         return (<div>{content}</div>);
     }
 
